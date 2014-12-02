@@ -1,0 +1,19 @@
+{
+  "name": "harasho",
+  "version": "0.0.0",
+  "description": "A simple stack for a safe and reliable Node.js app",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/team-kke/harasho.git"
+  },
+  "author": "Team KKE",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/team-kke/harasho/issues"
+  },
+  "homepage": "https://github.com/team-kke/harasho"
+}

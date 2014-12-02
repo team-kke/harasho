@@ -1,0 +1,19 @@
+{
+  "name": "harasho",
+  "version": "0.0.0",
+  "homepage": "https://github.com/team-kke/harasho",
+  "authors": [
+    "Team KKE"
+  ],
+  "description": "A simple stack for a safe and reliable Node.js app",
+  "main": "frontend/index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
