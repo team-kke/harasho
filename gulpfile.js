@@ -1,6 +1,7 @@
 var gulp = require('gulp')
   , browserify = require('browserify')
   , connect = require('gulp-connect')
+  , eslint = require('gulp-eslint')
   , rimraf = require('gulp-rimraf')
   , rename = require('gulp-rename')
   , transform = require('vinyl-transform')
@@ -15,7 +16,7 @@ gulp.task('html', ['clean:html'], function () {
     .pipe(connect.reload());
 });
 
-gulp.task('js', ['clean:js'], function () {
+gulp.task('js', ['lint:frontend', 'clean:js'], function () {
    var browserified = transform(function(filename) {
      var b = browserify(filename);
      b.transform('reactify');
@@ -58,6 +59,21 @@ gulp.task('watch', function () {
   gulp.watch(['frontend/scripts/**/*'], ['js']);
 });
 
+gulp.task('lint:frontend', function () {
+  return gulp.src('frontend/scripts/**/*')
+    .pipe(eslint({configFile: '.eslintrc.frontend'}))
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
+});
+
+gulp.task('lint:backend', function () {
+  return gulp.src(['backend/**/*.js', 'gulpfile.js'])
+    .pipe(eslint({configFile: '.eslintrc.backend'}))
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
+});
+
+gulp.task('lint', ['lint:frontend', 'lint:backend']);
 gulp.task('build', ['clean', 'html', 'js']);
 gulp.task('serve', ['connect', 'watch']);
-gulp.task('default', ['build']);
+gulp.task('default', ['lint', 'build']);
