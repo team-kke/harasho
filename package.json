@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/team-kke/harasho/issues"
   },
-  "homepage": "https://github.com/team-kke/harasho"
+  "homepage": "https://github.com/team-kke/harasho",
+  "devDependencies": {
+    "gulp": "^3.8.10"
+  }
 }
