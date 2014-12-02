@@ -1,3 +1,5 @@
+"use strict";
+
 var gulp = require('gulp')
   , browserify = require('browserify')
   , connect = require('gulp-connect')
@@ -17,7 +19,7 @@ gulp.task('html', ['clean:html'], function () {
 });
 
 gulp.task('js', ['lint:frontend', 'clean:js'], function () {
-   var browserified = transform(function(filename) {
+   var browserified = transform(function (filename) {
      var b = browserify(filename);
      b.transform('reactify');
      b.transform('debowerify');
