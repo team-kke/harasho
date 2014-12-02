@@ -1,9 +1,11 @@
 var gulp = require('gulp')
+  , connect = require('gulp-connect')
   , rimraf = require('gulp-rimraf');
 
-gulp.task('html', function () {
+gulp.task('html', ['clean:html'], function () {
   return gulp.src('frontend/index.html')
-    .pipe(gulp.dest('out/index.html'));
+    .pipe(gulp.dest('out'))
+    .pipe(connect.reload());
 });
 
 gulp.task('clean', function () {
@@ -16,4 +18,17 @@ gulp.task('clean:html', function () {
     .pipe(rimraf());
 });
 
-gulp.task('default', []);
+gulp.task('connect', ['build'], function () {
+  connect.server({
+    root: 'out',
+    livereload: true
+  });
+});
+
+gulp.task('watch', function () {
+  gulp.watch(['frontend/index.html'], ['html']);
+});
+
+gulp.task('build', ['clean', 'html']);
+gulp.task('serve', ['connect', 'watch']);
+gulp.task('default', ['build']);
