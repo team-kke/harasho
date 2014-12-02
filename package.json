@@ -17,8 +17,15 @@
   },
   "homepage": "https://github.com/team-kke/harasho",
   "devDependencies": {
+    "browserify": "^6.3.3",
+    "debowerify": "^1.1.1",
     "gulp": "^3.8.10",
     "gulp-connect": "^2.2.0",
-    "gulp-rimraf": "^0.1.1"
+    "gulp-rename": "^1.2.0",
+    "gulp-rimraf": "^0.1.1",
+    "gulp-uglify": "^1.0.1",
+    "reactify": "^0.17.1",
+    "through": "^2.3.6",
+    "vinyl-transform": "^1.0.0"
   }
 }
