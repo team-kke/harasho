@@ -16,6 +16,9 @@
     "url": "https://github.com/team-kke/harasho/issues"
   },
   "homepage": "https://github.com/team-kke/harasho",
+  "engines": {
+    "node": "0.10.26"
+  },
   "devDependencies": {
     "browserify": "^6.3.3",
     "debowerify": "^1.1.1",
