@@ -13,15 +13,31 @@ var gulp = require('gulp')
   , through = require('through')
   , uglify = require('gulp-uglify');
 
+// Backend Tasks
+
+gulp.task('back:run', ['back:lint'], function () {
+  nodemon({script: 'backend/index.js', ext: 'js', watch: 'backend'})
+    .on('change', ['lint:backend']);
+});
+
+gulp.task('back:lint', function () {
+  return gulp.src(['backend/**/*.js', 'gulpfile.js'])
+    .pipe(eslint({configFile: '.eslintrc.backend'}))
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
+});
+
+// Frontend Tasks
+
 var isDist = process.argv.indexOf('serve') === -1;
 
-gulp.task('html', ['clean:html'], function () {
+gulp.task('front:html', ['front:clean:html'], function () {
   return gulp.src('frontend/index.html')
     .pipe(gulp.dest('out'))
     .pipe(connect.reload());
 });
 
-gulp.task('js', ['lint:frontend', 'clean:js'], function () {
+gulp.task('front:js', ['front:lint', 'front:clean:js'], function () {
    var browserified = transform(function (filename) {
      var b = browserify(filename);
      b.transform('reactify');
@@ -37,7 +53,7 @@ gulp.task('js', ['lint:frontend', 'clean:js'], function () {
     .pipe(connect.reload());
 });
 
-gulp.task('css', ['clean:css'], function () {
+gulp.task('front:css', ['front:clean:css'], function () {
   return gulp.src('frontend/styles/index.styl')
     .pipe(stylus({
       'include css': true,
@@ -49,59 +65,50 @@ gulp.task('css', ['clean:css'], function () {
     .pipe(connect.reload());
 });
 
-gulp.task('clean', function () {
+gulp.task('front:clean', function () {
   return gulp.src('out')
     .pipe(rimraf());
 });
 
-gulp.task('clean:html', function () {
+gulp.task('front:clean:html', function () {
   return gulp.src('out/index.html')
     .pipe(rimraf());
 });
 
-gulp.task('clean:js', function () {
+gulp.task('front:clean:js', function () {
   return gulp.src('out/js/*')
     .pipe(rimraf());
 });
 
-gulp.task('clean:css', function () {
+gulp.task('front:clean:css', function () {
   return gulp.src('out/css/*')
     .pipe(rimraf());
 });
 
-gulp.task('connect', ['build'], function () {
+gulp.task('front:connect', ['front:build'], function () {
   connect.server({
     root: 'out',
     livereload: true
   });
 });
 
-gulp.task('watch', function () {
-  gulp.watch(['frontend/index.html'], ['html']);
-  gulp.watch(['frontend/scripts/**/*'], ['js']);
-  gulp.watch(['frontend/styles/**/*.styl'], ['css']);
+gulp.task('front:watch', function () {
+  gulp.watch(['frontend/index.html'], ['front:html']);
+  gulp.watch(['frontend/scripts/**/*'], ['front:js']);
+  gulp.watch(['frontend/styles/**/*.styl'], ['front:css']);
 });
 
-gulp.task('lint:frontend', function () {
+gulp.task('front:lint', function () {
   return gulp.src('frontend/scripts/**/*')
     .pipe(eslint({configFile: '.eslintrc.frontend'}))
     .pipe(eslint.format())
     .pipe(eslint.failOnError());
 });
 
-gulp.task('lint:backend', function () {
-  return gulp.src(['backend/**/*.js', 'gulpfile.js'])
-    .pipe(eslint({configFile: '.eslintrc.backend'}))
-    .pipe(eslint.format())
-    .pipe(eslint.failOnError());
-});
+gulp.task('front:serve', ['front:connect', 'front:watch']);
+gulp.task('front:build', ['front:clean', 'front:html', 'front:js', 'front:css']);
 
-gulp.task('backend', ['lint:backend'], function () {
-  nodemon({script: 'backend/index.js', ext: 'js', watch: 'backend'})
-    .on('change', ['lint:backend']);
-});
+// Common Tasks
 
-gulp.task('lint', ['lint:frontend', 'lint:backend']);
-gulp.task('build', ['clean', 'html', 'js', 'css']);
-gulp.task('serve', ['connect', 'watch']);
-gulp.task('default', ['lint', 'build']);
+gulp.task('lint', ['back:lint', 'front:lint']);
+gulp.task('default', ['lint', 'front:build']);
