@@ -1,15 +1,17 @@
 "use strict";
 
+var debug = require('debug')('server');
 var express = require('express');
+
+var routes = require('./routes/index');
+
 var app = express();
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
+app.use('/', routes);
 
-var server = app.listen(3000, function () {
+var server = app.listen(process.env.PORT || 3000, function () {
   var host = server.address().address;
   var port = server.address().port;
 
-  console.log('Example app listening at http://%s:%s', host, port);
+  debug('listening at http://%s:%s', host, port);
 });
