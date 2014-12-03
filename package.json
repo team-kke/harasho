@@ -32,6 +32,7 @@
     "vinyl-transform": "^1.0.0"
   },
   "dependencies": {
+    "debug": "^2.1.0",
     "express": "^4.10.4"
   }
 }
