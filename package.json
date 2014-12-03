@@ -30,5 +30,8 @@
     "reactify": "^0.17.1",
     "through": "^2.3.6",
     "vinyl-transform": "^1.0.0"
+  },
+  "dependencies": {
+    "express": "^4.10.4"
   }
 }
