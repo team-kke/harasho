@@ -5,6 +5,7 @@ var gulp = require('gulp')
   , connect = require('gulp-connect')
   , csso = require('gulp-csso')
   , eslint = require('gulp-eslint')
+  , nodemon = require('gulp-nodemon')
   , rimraf = require('gulp-rimraf')
   , rename = require('gulp-rename')
   , stylus = require('gulp-stylus')
@@ -93,6 +94,11 @@ gulp.task('lint:backend', function () {
     .pipe(eslint({configFile: '.eslintrc.backend'}))
     .pipe(eslint.format())
     .pipe(eslint.failOnError());
+});
+
+gulp.task('backend', ['lint:backend'], function () {
+  nodemon({script: 'backend/index.js', ext: 'js', watch: 'backend'})
+    .on('change', ['lint:backend']);
 });
 
 gulp.task('lint', ['lint:frontend', 'lint:backend']);
