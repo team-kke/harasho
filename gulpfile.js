@@ -3,9 +3,11 @@
 var gulp = require('gulp')
   , browserify = require('browserify')
   , connect = require('gulp-connect')
+  , csso = require('gulp-csso')
   , eslint = require('gulp-eslint')
   , rimraf = require('gulp-rimraf')
   , rename = require('gulp-rename')
+  , stylus = require('gulp-stylus')
   , transform = require('vinyl-transform')
   , through = require('through')
   , uglify = require('gulp-uglify');
@@ -34,6 +36,18 @@ gulp.task('js', ['lint:frontend', 'clean:js'], function () {
     .pipe(connect.reload());
 });
 
+gulp.task('css', ['clean:css'], function () {
+  return gulp.src('frontend/styles/index.styl')
+    .pipe(stylus({
+      'include css': true,
+      'paths': ['./node_modules', './bower_components']
+    }))
+    .pipe(isDist ? csso() : through())
+    .pipe(rename('build.css'))
+    .pipe(gulp.dest('out/css'))
+    .pipe(connect.reload());
+});
+
 gulp.task('clean', function () {
   return gulp.src('out')
     .pipe(rimraf());
@@ -49,6 +63,11 @@ gulp.task('clean:js', function () {
     .pipe(rimraf());
 });
 
+gulp.task('clean:css', function () {
+  return gulp.src('out/css/*')
+    .pipe(rimraf());
+});
+
 gulp.task('connect', ['build'], function () {
   connect.server({
     root: 'out',
@@ -59,6 +78,7 @@ gulp.task('connect', ['build'], function () {
 gulp.task('watch', function () {
   gulp.watch(['frontend/index.html'], ['html']);
   gulp.watch(['frontend/scripts/**/*'], ['js']);
+  gulp.watch(['frontend/styles/**/*.styl'], ['css']);
 });
 
 gulp.task('lint:frontend', function () {
@@ -76,6 +96,6 @@ gulp.task('lint:backend', function () {
 });
 
 gulp.task('lint', ['lint:frontend', 'lint:backend']);
-gulp.task('build', ['clean', 'html', 'js']);
+gulp.task('build', ['clean', 'html', 'js', 'css']);
 gulp.task('serve', ['connect', 'watch']);
 gulp.task('default', ['lint', 'build']);

@@ -17,6 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "react": "~0.12.1"
+    "react": "~0.12.1",
+    "normalize.css": "~3.0.2"
   }
 }
